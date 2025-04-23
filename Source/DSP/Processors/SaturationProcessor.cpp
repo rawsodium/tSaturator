@@ -37,11 +37,9 @@ void SaturationProcessor::prepare(const juce::dsp::ProcessSpec &_spec)
 void SaturationProcessor::process (const juce::dsp::ProcessContextReplacing<float>& context)
 {
     // upsample
-//    DBG("Saturation - Before processing: " << context.getInputBlock().getChannelPointer(0)[0]);
     auto upsampledBlock = oversampler->processSamplesUp(context.getInputBlock());
-    float satLevel = 1.0f + getSaturationMultiplier();
     // Scale input before passing through waveshaper
-//    float satLevel = 1.0f + (getSaturationMultiplier() * 4.0f);
+    float satLevel = 1.0f + getSaturationMultiplier();
 
     if (saturation == 0.01f)
         satLevel = 1.0f;
@@ -55,21 +53,9 @@ void SaturationProcessor::process (const juce::dsp::ProcessContextReplacing<floa
     juce::dsp::ProcessContextReplacing<float> upsampledContext(upsampledBlock);
     setDistortionTransferFunction(upsampledContext);
     processorChain.process(upsampledContext);
-    
-    // normalize output so it isn't too loud
-    // unsure if this is causing sat to not be heard anymore... investigate
-//    float postGain = 1.0f / (1.0f + getSaturationMultiplier());
-//    
-//    for (size_t channel = 0; channel < upsampledBlock.getNumChannels(); ++channel)
-//    {
-//        auto* channelData = upsampledBlock.getChannelPointer(channel);
-//        for (size_t sample = 0; sample < upsampledBlock.getNumSamples(); ++sample)
-//            channelData[sample] *= postGain;
-//    }
 
     // downsample
     oversampler->processSamplesDown(context.getOutputBlock());
-//    DBG("Saturation - After processing: " << context.getOutputBlock().getChannelPointer(0)[0]);
 }
 
 void SaturationProcessor::reset ()
@@ -84,7 +70,6 @@ void SaturationProcessor::parameterChanged (const juce::String& parameterID, flo
     {
         prevSaturation = saturation;
         saturation = newValue;
-//        DBG("Current Saturation value: " << juce::String(newValue));
     }
 }
 

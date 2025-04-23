@@ -24,11 +24,6 @@ hissKnobAttachment(apvts, "Hiss", hissKnob)
     addAndMakeVisible(driveKnob);
     addAndMakeVisible(mixKnob);
     addAndMakeVisible(hissKnob);
-    
-    apvts.addParameterListener(Params::SATURATION, this);
-    apvts.addParameterListener(Params::DRIVE, this);
-    apvts.addParameterListener(Params::MIX, this);
-    apvts.addParameterListener(Params::HISS, this);
 }
 
 void KnobPanel::resized()
@@ -102,46 +97,6 @@ void KnobPanel::resized()
     flexBox.performLayout(bounds);
 }
 
-void KnobPanel::parameterChanged(const juce::String &parameterID, float newValue)
-{
-    if (parameterID == Params::SATURATION)
-    {
-        auto knobBounds = saturationKnob.getBoundsInParent();
-        auto centerX = knobBounds.getCentreX();
-        auto bottomY = knobBounds.getBottom();
-        
-        auto knobRect = juce::Rectangle<int>(centerX - 50, bottomY - 6, 100, 18);
-        repaint(knobRect);
-        
-    } else if (parameterID == Params::DRIVE)
-    {
-        auto knobBounds = driveKnob.getBoundsInParent();
-        auto centerX = knobBounds.getCentreX();
-        auto bottomY = knobBounds.getBottom();
-        
-        auto knobRect = juce::Rectangle<int>(centerX - 50, bottomY - 6, 100, 18);
-        repaint(knobRect);
-        
-    } else if (parameterID == Params::MIX)
-    {
-        auto knobBounds = mixKnob.getBoundsInParent();
-        auto centerX = knobBounds.getCentreX();
-        auto bottomY = knobBounds.getBottom();
-        
-        auto knobRect = juce::Rectangle<int>(centerX - 50, bottomY - 6, 100, 18);
-        repaint(knobRect);
-        
-    } else if (parameterID == Params::HISS)
-    {
-        auto knobBounds = hissKnob.getBoundsInParent();
-        auto centerX = knobBounds.getCentreX();
-        auto bottomY = knobBounds.getBottom();
-        
-        auto knobRect = juce::Rectangle<int>(centerX - 50, bottomY - 6, 100, 18);
-        repaint(knobRect);
-    }
-}
-
 void KnobPanel::paint(juce::Graphics &g)
 {
     using namespace juce;
@@ -152,8 +107,8 @@ void KnobPanel::paint(juce::Graphics &g)
     
     // Draw boxes
     g.setColour(TSPalette::getKnobAreaBorderColor());
-    g.drawRoundedRectangle(colorArea.toFloat().reduced(20), 10.f, 4.f);
-    g.drawRoundedRectangle(noiseArea.toFloat().reduced(20), 10.f, 4.f);
+    g.drawRoundedRectangle(colorArea.toFloat().reduced(20), 10.f, 10.f);
+    g.drawRoundedRectangle(noiseArea.toFloat().reduced(20), 10.f, 10.f);
 
     // Optionally draw labels
     g.setColour(TSPalette::getLabelTicksAndTextColor());
@@ -169,7 +124,6 @@ void KnobPanel::paint(juce::Graphics &g)
         auto knobBounds = knob.getBoundsInParent(); // Relative to KnobPanel
         auto centerX = knobBounds.getCentreX();
         auto topY = knobBounds.getY();
-        auto bottomY = knobBounds.getBottom();
 
         auto label = knob.getKnobTitle();
         auto value = knob.getDisplayString();
@@ -181,14 +135,6 @@ void KnobPanel::paint(juce::Graphics &g)
         g.drawFittedText(label,
                          centerX - (textWidth / 2),
                          topY - 14, // A little above the knob
-                         textWidth,
-                         textHeight,
-                         Justification::centred,
-                         1);
-        // Value below the knob
-        g.drawFittedText(value,
-                         centerX - (textWidth / 2),
-                         bottomY - 6, // A little below the knob
                          textWidth,
                          textHeight,
                          Justification::centred,

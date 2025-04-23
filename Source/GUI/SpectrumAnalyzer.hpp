@@ -135,7 +135,7 @@ public:
     {
         auto localBounds = getLocalBounds();
         auto bounds = SpectrumAnalyzerUtils::getAnalysisArea(localBounds).toFloat();
-        return juce::jmap(dB, MIN_DB, MAX_DB, bounds.getBottom(), bounds.getY());
+        return juce::jmap(dB, -36.f, 12.f, bounds.getBottom(), bounds.getY());
     }
 
     float freqToX(float freq) const
@@ -213,11 +213,11 @@ public:
             auto textWidth = g.getCurrentFont().getStringWidth(str);
             int labelX = left - textWidth - 4;
             int labelY = (int)(y - fontHeight * 0.5f);
-            if (dB == MAX_DB)
+            if (dB == 12.f)
             {
                 labelY = (int)(y + fontHeight);
             } 
-            else if (dB == MIN_DB)
+            else if (dB == -36.f)
             {
                 labelY = (int)(y - fontHeight * 0.75f);
             }
@@ -256,8 +256,8 @@ private:
     FFTAnalyzer& analyzer;
     bool shouldShowFFTAnalysis = true;
     const std::vector<float> freqs { 20.f, 50.f, 100.f, 200.f, 500.f, 1000.f, 2000.f, 5000.f, 10000.f, 20000.f };
-    const std::vector<float> gains { -12.f, 0.f, 12.f, 24.f, 36.f };
+    const std::vector<float> gains { -36.f, -24.f, -12.f, 0.f, 12.f };
     const std::vector<juce::String> hertz
     { "20Hz", "50Hz", "100Hz", "200Hz", "500Hz", "1kHz", "2kHz", "5kHz", "10kHz", "20kHz" };
-    const std::vector<juce::String> dbs { "-12", "0", "+12", "+24", "+36" };
+    const std::vector<juce::String> dbs { "-36", "-24", "-12", "0", "+12" };
 };

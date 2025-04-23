@@ -64,7 +64,6 @@ void DriveProcessor::parameterChanged (const juce::String& parameterID, float ne
         drive = newValue;
         prevGain = curGain;
         mapDriveScaleToDecibels(drive);
-        DBG("Drive: " << drive << " -> Gain: " << curGain);
     }
 }
 
